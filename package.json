@@ -1,0 +1,28 @@
+{
+  "scripts": {
+    "start:dev": "webpack-dev-server",
+    "build": "webpack"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@cycle/dom": "^21.1.0",
+    "@cycle/isolate": "^3.4.0",
+    "@cycle/run": "^4.4.0",
+    "@cycle/xstream-adapter": "^3.1.0",
+    "express": "^4.16.4",
+    "socket.io": "^2.1.1",
+    "xstream": "^11.7.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "babel-loader": "^8.0.4",
+    "ts-loader": "^5.2.2",
+    "typescript": "^2.9.2",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
+  }
+}
