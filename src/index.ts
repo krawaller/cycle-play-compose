@@ -1,7 +1,7 @@
 import {run, Driver} from '@cycle/run'
 import {div, label, input, hr, h1, makeDOMDriver, VNode, MainDOMSource} from '@cycle/dom'
 
-import Nameform from './nameform';
+import Nameform from './nameForm';
 import xstream, {Stream} from 'xstream';
 
 function main(sources: { DOM: MainDOMSource }) {
@@ -17,4 +17,6 @@ function main(sources: { DOM: MainDOMSource }) {
   return { DOM: vdom$ }
 }
 
-run(main, { DOM: makeDOMDriver('#app-container') });
+const driver = makeDOMDriver('#app-container')
+
+run(main, { DOM: driver });

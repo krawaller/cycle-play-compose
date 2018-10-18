@@ -2,8 +2,7 @@ import {input, MainDOMSource} from '@cycle/dom';
 import isolate from '@cycle/isolate'
 import xstream, {Stream} from 'xstream';
 
-export default isolate((sources: { DOM: MainDOMSource, assign$: Stream<string> }) => {
-
+export function AssignableInput(sources: { DOM: MainDOMSource, assign$: Stream<string> }) {
   const newValue$ = sources.DOM
     .select('.field').events('input')
     .map((e: Event) => e && e.target && (e.target as HTMLInputElement).value);
@@ -12,5 +11,7 @@ export default isolate((sources: { DOM: MainDOMSource, assign$: Stream<string> }
 
   const vtree$ = value$.map(state => input('.field', {attrs: {type: 'text'}, props:{value: state}}));
 
-  return { DOM: vtree$, value$: newValue$.startWith('') };
-});
+  return { DOM: vtree$, value$: newValue$.startWith('') as Stream<string> };
+};
+
+export default (sources) => isolate(AssignableInput)(sources);

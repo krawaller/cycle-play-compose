@@ -45,6 +45,6 @@ export default isolate( (sources: {DOM: MainDOMSource, disabled$: Stream<boolean
 
   return {
     DOM: vtree$,
-    submit$: action$.filter(i => i === 'CONFIRM')
+    submit$: action$.filter(i => i === 'CONFIRM').mapTo(undefined)
   }
 });
