@@ -5,15 +5,18 @@ import AssignableInput from './assignableInput'
 import xstream, {Stream} from 'xstream';
 import sampleCombine from 'xstream/extra/sampleCombine'
 
-function intent(newFieldValue$: Stream<string>, confirmButtonClick$: Stream<any>): Stream<string> {
-  return confirmButtonClick$
-    .startWith('') // to get initial render
-    .compose(sampleCombine(newFieldValue$.startWith('')))
+function intent(newFieldValue$: Stream<string>, confirmButtonClick$: Stream<any>, assignedNames$: Stream<string>): Stream<string> {
+  const confirmedName$ = confirmButtonClick$
+    .compose(sampleCombine(newFieldValue$))
     .map(([_, v]) => v);
+
+  return xstream.merge(
+    confirmedName$,
+    assignedNames$
+  );
 }
 
 function view(inputvtree$, confirmvtree$){
-  console.log('nameform view');
   return xstream.combine(inputvtree$, confirmvtree$).map(([inputvtree,confirmvtree]) => {
     return div('.child',[
       label('Name: '),
@@ -23,7 +26,7 @@ function view(inputvtree$, confirmvtree$){
   });
 }
 
-export default (sources: { DOM: MainDOMSource })=>{
+export default (sources: { DOM: MainDOMSource, assign$: Stream<string> })=>{
 
   const assignableInputSources = {
     DOM: sources.DOM,
@@ -37,36 +40,16 @@ export default (sources: { DOM: MainDOMSource })=>{
   };
   const confirmButtonSinks = ConfirmButton(confirmButtonSources)
 
-  const submittedName$ = intent(assignableInputSinks.value$, confirmButtonSinks.submit$);
+  const submittedName$ = intent(assignableInputSinks.value$, confirmButtonSinks.submit$, sources.assign$);
 
   assignableInputSources.assign$.imitate(
-    submittedName$.mapTo('')
+    xstream.merge(submittedName$, sources.assign$).mapTo('')
   );
 
-  const vtree$ = view(assignableInputSinks.DOM, confirmButtonSinks.DOM)
-
-  //const reducer$ = assignableInputSinks.value$.map(setName)
+  const vtree$ = view(assignableInputSinks.DOM, confirmButtonSinks.DOM);
 
   return {
     DOM: vtree$,
-    name$: submittedName$,
-    //reducers$: reducer$.tap(fn => consol)
+    name$: xstream.merge(sources.assign$, submittedName$)
   }
 };
-
-
-type State = {
-  name: string;
-  submitted: string;
-}
-
-// type Reducer<T> = (state: T) => T;
-
-// function $etName(name: string): Reducer<State> {
-//   return function setName(state) {
-//     return {
-//       ...state,
-//       name
-//     };
-//   }
-// }

@@ -20,11 +20,12 @@ function model(action$: Stream<string>): Stream<State>{
     v === 'DISABLE' ? 'disabled'
     : v === 'MAYBE' ? 'areyousure'
     : 'waiting' // because CANCEL, CONFIRM and ENABLE all means we go to waiting mode
-  ).startWith('disabled');
+  );
 }
 
 function view(state$: Stream<State>) {
   return state$.map(state=> {
+    console.log('RENDERING CONFIRM');
     return span('.child', [
       state === 'areyousure' ? span('.confirmapp',[
         button('.cancel','Cancel'),
@@ -39,12 +40,12 @@ function view(state$: Stream<State>) {
 
 export default isolate( (sources: {DOM: MainDOMSource, disabled$: Stream<boolean>})=> {
 
-  const action$ = intent(sources)
-  const state$ = model(action$)
-  const vtree$ = view(state$)
+  const action$ = intent(sources);
+  const state$ = model(action$);
+  const vtree$ = view(state$.startWith('disabled'));
 
   return {
     DOM: vtree$,
     submit$: action$.filter(i => i === 'CONFIRM').mapTo(undefined)
-  }
+  };
 });
