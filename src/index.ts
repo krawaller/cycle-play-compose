@@ -1,26 +1,42 @@
-import {run} from '@cycle/run'
-import {div, label, input, hr, h1, makeDOMDriver, VNode, MainDOMSource} from '@cycle/dom'
+import {run} from '@cycle/run';
+import {div, h1, makeDOMDriver, MainDOMSource, VNode, s} from '@cycle/dom';
+import {withState, StateSource, Reducer} from '@cycle/state';
 
 import Nameform from './nameForm';
 import xstream, {Stream} from 'xstream';
 
-function main(sources: { DOM: MainDOMSource }) {
+type AppState = {
+  submittedName: string
+};
+
+function main(sources: { DOM: MainDOMSource, state: StateSource<AppState> }) {
   const nameformSinks = Nameform({
     DOM: sources.DOM,
-    assign$: xstream.of('John Doe')
+    assign$: sources.state.stream.map(s => s.submittedName)
   });
 
-  const vdom$ = xstream.combine(nameformSinks.name$.startWith(''), nameformSinks.DOM).map(([name, nameformvdom]) =>
+  const vdom$ = xstream.combine(sources.state.stream, nameformSinks.DOM).map(([appState, nameformvdom]) =>
     div([
-      h1('Hello ' + name),
+      h1('Hello ' + appState.submittedName),
       nameformvdom
     ])
   );
 
-  return { DOM: vdom$ }
+  const sinks: { DOM: Stream<VNode>, state: Stream<Reducer<AppState>> } = {
+    DOM: vdom$,
+    // @ts-ignore
+    state: xstream.merge(
+      xstream.of((s: AppState) => ({ ...s, submittedName: 'John Doe'}) as AppState),
+      nameformSinks.name$.map(v => (s: AppState) => ({ ...s, submittedName: v }) as AppState)
+    )
+  };
+
+  return sinks;
 }
+
+const wrappedMain = withState(main);
 
 const driver = makeDOMDriver('#app-container')
 
 // @ts-ignore
-run(main, { DOM: driver });
+run(wrappedMain, { DOM: driver });

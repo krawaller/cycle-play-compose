@@ -11,7 +11,6 @@ export function AssignableInput(sources: { DOM: MainDOMSource, assign$: Stream<s
   const value$ = xstream.merge(newValue$, sources.assign$).startWith('');
 
   const vtree$ = value$.map(state => {
-    console.log('RENDERING ASSIGNABLEINPUT');
     return input('.field', {attrs: {type: 'text'}, props:{value: state}})
   });
 

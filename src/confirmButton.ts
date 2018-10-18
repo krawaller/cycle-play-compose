@@ -25,7 +25,6 @@ function model(action$: Stream<string>): Stream<State>{
 
 function view(state$: Stream<State>) {
   return state$.map(state=> {
-    console.log('RENDERING CONFIRM');
     return span('.child', [
       state === 'areyousure' ? span('.confirmapp',[
         button('.cancel','Cancel'),
