@@ -8,11 +8,9 @@ export function AssignableInput(sources: { DOM: MainDOMSource, assign$: Stream<s
     .select('.field').events('input')
     .map((e: Event) => e && e.target && (e.target as HTMLInputElement).value);
   
-  const value$ = xstream.merge(newValue$, sources.assign$).startWith('');
+  const value$ = xstream.merge(newValue$, sources.assign$);
 
-  const vtree$ = value$.map(state => {
-    return input('.field', {attrs: {type: 'text'}, props:{value: state}})
-  });
+  const vtree$ = value$.map(state => input('.field', {attrs: {type: 'text'}, props:{value: state}}));
 
   return { DOM: vtree$, value$: value$ as Stream<string> };
 };
