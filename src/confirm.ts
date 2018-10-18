@@ -1,10 +1,10 @@
-import {span, button} from '@cycle/dom';
+import {span, button, MainDOMSource} from '@cycle/dom';
 
 import isolate from '@cycle/isolate'
 
-import xstream from 'xstream';
+import xstream, {Stream} from 'xstream';
 
-function intent(sources) {
+function intent(sources: {DOM: MainDOMSource, disabled$: Stream<boolean>}) {
   return xstream.merge(
     (sources.disabled$ || xstream.create()).map(i=> i ? 'DISABLE' : 'ENABLE'),
     sources.DOM.select('.maybe').events('click').map(i=>'MAYBE'),
@@ -13,7 +13,9 @@ function intent(sources) {
   );
 }
 
-function model(action$){
+type State = 'disabled' | 'areyousure' | 'waiting';
+
+function model(action$: Stream<string>): Stream<State>{
   return action$.map( v => 
     v === 'DISABLE' ? 'disabled'
     : v === 'MAYBE' ? 'areyousure'
@@ -21,7 +23,7 @@ function model(action$){
   ).startWith('disabled');
 }
 
-function view(state$) {
+function view(state$: Stream<State>) {
   return state$.map(state=> {
     return span('.child', [
       state === 'areyousure' ? span('.confirmapp',[
@@ -35,7 +37,7 @@ function view(state$) {
   });
 }
 
-export default isolate( (sources)=> {
+export default isolate( (sources: {DOM: MainDOMSource, disabled$: Stream<boolean>})=> {
 
   const action$ = intent(sources)
   const state$ = model(action$)

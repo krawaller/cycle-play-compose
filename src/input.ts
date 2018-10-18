@@ -1,12 +1,12 @@
-import {input} from '@cycle/dom';
+import {input, MainDOMSource} from '@cycle/dom';
 import isolate from '@cycle/isolate'
-import xstream from 'xstream';
+import xstream, {Stream} from 'xstream';
 
-export default isolate((sources) => {
+export default isolate((sources: { DOM: MainDOMSource, assign$: Stream<string> }) => {
 
   const newValue$ = sources.DOM
     .select('.field').events('input')
-    .map(e => e.target.value);
+    .map((e: Event) => e && e.target && (e.target as HTMLInputElement).value);
   
   const value$ = xstream.merge(newValue$, sources.assign$.startWith(''));
 

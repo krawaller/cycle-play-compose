@@ -1,10 +1,10 @@
-import {run} from '@cycle/run'
-import {div, label, input, hr, h1, makeDOMDriver} from '@cycle/dom'
+import {run, Driver} from '@cycle/run'
+import {div, label, input, hr, h1, makeDOMDriver, VNode, MainDOMSource} from '@cycle/dom'
 
 import Nameform from './nameform';
-import xstream from 'xstream';
+import xstream, {Stream} from 'xstream';
 
-function main(sources) {
+function main(sources: { DOM: MainDOMSource }) {
   const nameformSinks = Nameform({ DOM: sources.DOM });
 
   const vdom$ = xstream.combine(nameformSinks.name$.startWith(''), nameformSinks.DOM).map(([name, nameformvdom]) =>

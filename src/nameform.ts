@@ -1,8 +1,8 @@
-import {div, label, input, hr, h4, button, p, b} from '@cycle/dom';
+import {div, label, MainDOMSource} from '@cycle/dom';
 import isolate from '@cycle/isolate'
 import Confirm from './confirm'
 import Input from './input'
-import xstream from 'xstream';
+import xstream, {Stream} from 'xstream';
 import sampleCombine from 'xstream/extra/sampleCombine'
 
 function intent(value$, confirm$){
@@ -23,7 +23,7 @@ function view(inputvtree$, confirmvtree$){
   });
 }
 
-export default isolate((sources)=>{
+export default isolate((sources: { DOM: MainDOMSource })=>{
 
   const inputSources = {
     DOM: sources.DOM,
