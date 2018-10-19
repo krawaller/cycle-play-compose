@@ -9,7 +9,11 @@ type AppState = {
   submittedName: string
 };
 
-function main(sources: { DOM: MainDOMSource, state: StateSource<AppState> }) {
+type AppSources = { DOM: MainDOMSource, state: StateSource<AppState> }
+type AppSinks = { DOM: Stream<VNode>, state: Stream<Reducer<AppState>> }
+
+
+function main(sources: AppSources) {
   const formSinks = Form({
     DOM: sources.DOM,
     assign$: sources.state.stream.map(s => s.submittedName)
@@ -25,7 +29,7 @@ function main(sources: { DOM: MainDOMSource, state: StateSource<AppState> }) {
   const initialReducer$: Stream<Reducer<AppState>> = xstream.of((s) => ({ ...s, submittedName: 'John Doe'}));
   const newNameReducer$: Stream<Reducer<AppState>> = formSinks.name$.map(v => (s) => ({ ...s, submittedName: v }));
 
-  const sinks: { DOM: Stream<VNode>, state: Stream<Reducer<AppState>> } = {
+  const sinks: AppSinks = {
     DOM: vdom$,
     state: xstream.merge(
       initialReducer$,
