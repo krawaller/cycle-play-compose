@@ -1,14 +1,14 @@
 import {span, button, MainDOMSource} from '@cycle/dom';
-
-import isolate from '@cycle/isolate'
-
+import {StateSource} from '@cycle/state';
 import xstream, {Stream} from 'xstream';
+
+type ConfirmButtonSources = {DOM: MainDOMSource, state: StateSource<boolean>};
 
 type Action = 'DISABLE' | 'ENABLE' | 'MAYBE' | 'CANCEL' | 'CONFIRM';
 
-function intent(sources: {DOM: MainDOMSource, disabled$: Stream<boolean>}) {
+function intent(sources: ConfirmButtonSources) {
   return xstream.merge(
-    sources.disabled$.map(i=> i ? 'DISABLE' : 'ENABLE'),
+    sources.state.stream.map(i=> i ? 'DISABLE' : 'ENABLE'),
     sources.DOM.select('.maybe').events('click').mapTo('MAYBE'),
     sources.DOM.select('.cancel').events('click').mapTo('CANCEL'),
     sources.DOM.select('.confirm').events('click').mapTo('CONFIRM'),
@@ -39,7 +39,7 @@ function view(state$: Stream<State>) {
   });
 }
 
-export default isolate( (sources: {DOM: MainDOMSource, disabled$: Stream<boolean>}) => {
+export default (sources: ConfirmButtonSources) => {
 
   const action$ = intent(sources);
   const state$ = model(action$);
@@ -49,4 +49,4 @@ export default isolate( (sources: {DOM: MainDOMSource, disabled$: Stream<boolean
     DOM: vtree$,
     submit$: action$.filter(i => i === 'CONFIRM').mapTo(undefined)
   };
-});
+};

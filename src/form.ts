@@ -4,7 +4,7 @@ import ConfirmButton from './confirmButton'
 import AssignableInput from './assignableInput'
 import xstream, {Stream} from 'xstream';
 import sampleCombine from 'xstream/extra/sampleCombine'
-import {StateSource, Reducer} from '@cycle/state';
+import {StateSource, Reducer, Lens} from '@cycle/state';
 
 function intent(state$: Stream<FormState>, confirmButtonClick$: Stream<any>): Stream<string> {
   return confirmButtonClick$
@@ -35,11 +35,12 @@ function Form (sources: FormSources): FormSinks {
 
   const assignableInputSinks = isolate(AssignableInput, 'fieldContent')(sources) as FormSinks;
 
-  const confirmButtonSources = {
-    DOM: sources.DOM,
-    disabled$:  sources.state.stream.map(s => !s.fieldContent)
+  const confirmButtonLens: Lens<FormState, boolean> = {
+    get: (s: FormState) => !s.fieldContent,
+    set: s => s
   };
-  const confirmButtonSinks = ConfirmButton(confirmButtonSources)
+
+  const confirmButtonSinks = isolate(ConfirmButton, {state: confirmButtonLens})(sources);
 
   const submittedName$ = intent(sources.state.stream, confirmButtonSinks.submit$);
 
