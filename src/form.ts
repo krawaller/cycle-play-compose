@@ -4,11 +4,11 @@ import ConfirmButton from './confirmButton'
 import AssignableInput from './assignableInput'
 import xstream, {Stream} from 'xstream';
 import sampleCombine from 'xstream/extra/sampleCombine'
-import {withState, StateSource, Reducer} from '@cycle/state';
+import {StateSource, Reducer} from '@cycle/state';
 
-function intent(newFieldValue$: Stream<string>, confirmButtonClick$: Stream<any>): Stream<string> {
+function intent(state$: Stream<FormState>, confirmButtonClick$: Stream<any>): Stream<string> {
   return confirmButtonClick$
-    .compose(sampleCombine(newFieldValue$))
+    .compose(sampleCombine(state$.map(s => s.fieldContent))) 
     .map(([_, v]) => v);
 }
 
@@ -33,11 +33,7 @@ export type FormSinks = { DOM: Stream<VNode>, state: Stream<Reducer<FormState>> 
 
 function Form (sources: FormSources): FormSinks {
 
-  const assignableInputSources = {
-    DOM: sources.DOM,
-    assign$: sources.state.stream.map(s => s.fieldContent)
-  };
-  const assignableInputSinks = AssignableInput(assignableInputSources);
+  const assignableInputSinks = isolate(AssignableInput, 'fieldContent')(sources) as FormSinks;
 
   const confirmButtonSources = {
     DOM: sources.DOM,
@@ -45,19 +41,18 @@ function Form (sources: FormSources): FormSinks {
   };
   const confirmButtonSinks = ConfirmButton(confirmButtonSources)
 
-  const submittedName$ = intent(assignableInputSinks.value$, confirmButtonSinks.submit$);
+  const submittedName$ = intent(sources.state.stream, confirmButtonSinks.submit$);
 
   const vtree$ = view(assignableInputSinks.DOM, confirmButtonSinks.DOM);
 
   const defaultReducer$: Stream<Reducer<FormState>> = xstream.of((s) => s || ({ submittedName: '', fieldContent: '' }));
-  const typeReducer$: Stream<Reducer<FormState>> = assignableInputSinks.value$.map( v => (s) => ({ ...s, fieldContent: v }) );
   const submitReducer$: Stream<Reducer<FormState>> = submittedName$.map( newName => () => ({ submittedName: newName, fieldContent: '' }));
 
   return {
     DOM: vtree$,
     state: xstream.merge(
       defaultReducer$,
-      typeReducer$,
+      assignableInputSinks.state,
       submitReducer$
     )
   };
