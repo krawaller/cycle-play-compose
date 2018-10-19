@@ -39,7 +39,7 @@ function view(state$: Stream<State>) {
   });
 }
 
-export default isolate( (sources: {DOM: MainDOMSource, disabled$: Stream<boolean>})=> {
+export default isolate( (sources: {DOM: MainDOMSource, disabled$: Stream<boolean>}) => {
 
   const action$ = intent(sources);
   const state$ = model(action$);
