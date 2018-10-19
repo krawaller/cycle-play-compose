@@ -7,8 +7,10 @@ import Form, { FormState } from './form';
 import xstream, {Stream} from 'xstream';
 
 type AppState = {
-  submittedName: string,
-  form: {
+  data: {
+    submittedName: string,
+  },
+  ui: {
     fieldContent: string
   }
 };
@@ -19,11 +21,12 @@ type AppSinks = { DOM: Stream<VNode>, state: Stream<Reducer<AppState>> }
 
 function main(sources: AppSources) {
   const formLens: Lens<AppState, FormState> = {
-    get: (state: AppState) => ({ fieldContent: state.form.fieldContent, submittedName: state.submittedName }),
-    set: (oldParentState: AppState, newChildState: FormState) => ({
-      ...oldParentState,
-      submittedName: newChildState.submittedName,
-      form: {
+    get: (state: AppState) => ({ fieldContent: state.ui.fieldContent, submittedName: state.data.submittedName }),
+    set: (oldParentState: AppState, newChildState: FormState): AppState => ({
+      data: {
+        submittedName: newChildState.submittedName
+      },
+      ui: {
         fieldContent: newChildState.fieldContent
       }
     })
@@ -32,12 +35,13 @@ function main(sources: AppSources) {
 
   const vdom$ = xstream.combine(sources.state.stream, formSinks.DOM).map(([appState, nameformvdom]) =>
     div([
-      h1('Hello ' + appState.submittedName),
+      h1('Hello ' + appState.data.submittedName),
       nameformvdom
     ])
   );
 
-  const initialReducer$: Stream<Reducer<AppState>> = xstream.of((s) => ({ form: {fieldContent: ''}, submittedName: 'John Doe'}));
+  const initialState: AppState = { ui: {fieldContent: ''}, data: {submittedName: 'John Doe'}};
+  const initialReducer$: Stream<Reducer<AppState>> = xstream.of((s) => (initialState));
 
   const sinks: AppSinks = {
     DOM: vdom$,
