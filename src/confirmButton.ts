@@ -26,7 +26,7 @@ function model(action$: Stream<Action>): Stream<State>{
 }
 
 function view(state$: Stream<State>) {
-  return state$.map(state=> {
+  return state$.map(state => {
     return span('.child', [
       state === 'areyousure' ? span('.confirmapp',[
         button('.cancel','Cancel'),

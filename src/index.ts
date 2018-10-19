@@ -16,7 +16,7 @@ type AppSinks = { DOM: Stream<VNode>, state: Stream<Reducer<AppState>> }
 function main(sources: AppSources) {
   const formSinks = Form({
     DOM: sources.DOM,
-    assign$: sources.state.stream.map(s => s.submittedName)
+    name$: sources.state.stream.map(s => s.submittedName)
   });
 
   const vdom$ = xstream.combine(sources.state.stream, formSinks.DOM).map(([appState, nameformvdom]) =>
