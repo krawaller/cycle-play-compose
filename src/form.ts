@@ -22,28 +22,26 @@ function view(inputvtree$, confirmvtree$){
   });
 }
 
-type FormState = {
+export type FormState = {
   fieldContent: string
+  submittedName: string
 }
 
-export type FormSources = { DOM: MainDOMSource, name$: Stream<string> };
-export type FormSinks = { DOM: Stream<VNode>, name$: Stream<string> };
-
-type FormSourcesInner = FormSources & { formState: StateSource<FormState> };
-type FormSinksInner = FormSinks & { formState: Stream<Reducer<FormState>> }
+export type FormSources = { DOM: MainDOMSource, state: StateSource<FormState> };
+export type FormSinks = { DOM: Stream<VNode>, state: Stream<Reducer<FormState>>  };
 
 
-function Form (sources: FormSourcesInner): FormSinksInner {
+function Form (sources: FormSources): FormSinks {
 
   const assignableInputSources = {
     DOM: sources.DOM,
-    assign$: sources.formState.stream.map(s => s.fieldContent)
+    assign$: sources.state.stream.map(s => s.fieldContent)
   };
   const assignableInputSinks = AssignableInput(assignableInputSources);
 
   const confirmButtonSources = {
     DOM: sources.DOM,
-    disabled$:  sources.formState.stream.map(s => !s.fieldContent)
+    disabled$:  sources.state.stream.map(s => !s.fieldContent)
   };
   const confirmButtonSinks = ConfirmButton(confirmButtonSources)
 
@@ -51,19 +49,18 @@ function Form (sources: FormSourcesInner): FormSinksInner {
 
   const vtree$ = view(assignableInputSinks.DOM, confirmButtonSinks.DOM);
 
-  const initialReducer$: Stream<Reducer<FormState>> = xstream.of(() => ({fieldContent: '' }));
-  const typeReducer$: Stream<Reducer<FormState>> = assignableInputSinks.value$.map( v => () => ({ fieldContent: v }) );
-  const resetReducer$: Stream<Reducer<FormState>> = sources.name$.map( n => () => ({fieldContent: '' }));
+  const defaultReducer$: Stream<Reducer<FormState>> = xstream.of((s) => s || ({ submittedName: '', fieldContent: '' }));
+  const typeReducer$: Stream<Reducer<FormState>> = assignableInputSinks.value$.map( v => (s) => ({ ...s, fieldContent: v }) );
+  const submitReducer$: Stream<Reducer<FormState>> = submittedName$.map( newName => () => ({ submittedName: newName, fieldContent: '' }));
 
   return {
     DOM: vtree$,
-    name$: submittedName$,
-    formState: xstream.merge(
-      initialReducer$,
+    state: xstream.merge(
+      defaultReducer$,
       typeReducer$,
-      resetReducer$
+      submitReducer$
     )
   };
 };
 
-export default withState(Form, 'formState');
+export default Form
