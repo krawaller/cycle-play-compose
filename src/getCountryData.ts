@@ -17,17 +17,19 @@ const response2state = (res: Response | Error): CountryDataState => {
   }
 };
 
-export type CountryDataSources = {
+export type GetCountryDataSources = {
   HTTP: HTTPSource;
   state: StateSource<string>; // Stream of country names to load
 };
 
-export type CountryDataSinks = {
+export type GetCountryDataSinks = {
   HTTP: Stream<RequestInput>;
   countryData: Stream<CountryDataState>;
 };
 
-export function CountryData(sources: CountryDataSources): CountryDataSinks {
+export function GetCountryData(
+  sources: GetCountryDataSources
+): GetCountryDataSinks {
   const country$ = sources.state.stream.drop(1);
   const request$ = country$.map((country) => ({
     url: `https://api.covid19api.com/total/country/${country}`,
@@ -54,4 +56,4 @@ export function CountryData(sources: CountryDataSources): CountryDataSinks {
   };
 }
 
-export default CountryData;
+export default GetCountryData;

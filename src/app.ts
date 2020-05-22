@@ -5,7 +5,7 @@ import isolate from "@cycle/isolate";
 import xstream, { Stream } from "xstream";
 
 import Form, { FormState } from "./form";
-import CountryData from "./countryData";
+import GetCountryData from "./getCountryData";
 
 import { AppState } from "./types";
 
@@ -40,17 +40,21 @@ function App(sources: AppSources) {
     sources
   ) as AppSinks;
 
-  const countryDataLens: Lens<AppState, string> = {
+  const getCountryDataLens: Lens<AppState, string> = {
     get: (state: AppState) => state.data.submittedName,
     set: (s) => s,
   };
 
-  const countryDataSinks = isolate(CountryData, {
-    state: countryDataLens,
+  const getCountryDataSinks = isolate(GetCountryData, {
+    state: getCountryDataLens,
   })(sources);
 
   const vdom$ = xstream
-    .combine(sources.state.stream, formSinks.DOM, countryDataSinks.countryData)
+    .combine(
+      sources.state.stream,
+      formSinks.DOM,
+      getCountryDataSinks.countryData
+    )
     .map(([appState, nameformvdom, out]) =>
       div([
         h1("Hello " + appState.data.submittedName),
@@ -67,7 +71,7 @@ function App(sources: AppSources) {
   const sinks: AppSinks = {
     DOM: vdom$,
     state: formSinks.state.startWith(() => initialState),
-    HTTP: countryDataSinks.HTTP,
+    HTTP: getCountryDataSinks.HTTP,
   };
 
   return sinks;
