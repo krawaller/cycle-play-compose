@@ -28,7 +28,8 @@ export type CountryDataSinks = {
 };
 
 export function CountryData(sources: CountryDataSources): CountryDataSinks {
-  const request$ = sources.state.stream.map((country) => ({
+  const country$ = sources.state.stream.drop(1);
+  const request$ = country$.map((country) => ({
     url: `https://api.covid19api.com/total/country/${country}`,
     category: "countryData",
   }));
@@ -42,9 +43,7 @@ export function CountryData(sources: CountryDataSources): CountryDataSinks {
 
   const countryData$: Stream<CountryDataState> = xstream
     .merge(
-      sources.state.stream.map(
-        (country) => ({ state: "loading", country } as const)
-      ),
+      country$.map((country) => ({ state: "loading", country } as const)),
       response$
     )
     .startWith({ state: "idle" });
