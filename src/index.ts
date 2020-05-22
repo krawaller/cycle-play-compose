@@ -47,13 +47,10 @@ function main(sources: AppSources) {
     ui: { fieldContent: "" },
     data: { submittedName: "John Doe" },
   };
-  const initialReducer$: Stream<Reducer<AppState>> = xstream.of(
-    (s) => initialState
-  );
 
   const sinks: AppSinks = {
     DOM: vdom$,
-    state: xstream.merge(initialReducer$, formSinks.state),
+    state: formSinks.state.startWith(() => initialState),
   };
 
   return sinks;
