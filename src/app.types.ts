@@ -1,4 +1,19 @@
-// Types that are of global interest to the app
+import { MainDOMSource, VNode } from "@cycle/dom";
+import { StateSource, Reducer } from "@cycle/state";
+import { HTTPSource, RequestInput } from "@cycle/http";
+import { Stream } from "xstream";
+
+export type AppSources = {
+  DOM: MainDOMSource;
+  HTTP: HTTPSource;
+  state: StateSource<AppState>;
+};
+
+export type AppSinks = {
+  DOM: Stream<VNode>;
+  state: Stream<Reducer<AppState>>;
+  HTTP: Stream<RequestInput>;
+};
 
 export type AppState = {
   data: {

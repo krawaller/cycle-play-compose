@@ -1,7 +1,8 @@
 import {
   GetCountryDataSinks,
   GetCountryDataSources,
-} from "./getCountryData.types";
+} from "./getCountryData.typesOuter";
+export * from "./getCountryData.typesOuter";
 import intent from "./getCountryData.intent";
 import model from "./getCountryData.model";
 

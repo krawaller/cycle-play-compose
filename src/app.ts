@@ -1,44 +1,15 @@
-import { div, h1, MainDOMSource, VNode } from "@cycle/dom";
-import { StateSource, Reducer, Lens } from "@cycle/state";
-import { HTTPSource, RequestInput } from "@cycle/http";
+import { div, h1 } from "@cycle/dom";
+import { Lens } from "@cycle/state";
 import isolate from "@cycle/isolate";
-import xstream, { Stream } from "xstream";
+import xstream from "xstream";
 
-import Form, { FormState } from "./form";
 import GetCountryData from "./getCountryData";
 
-import { AppState } from "./types";
-
-type AppSources = {
-  DOM: MainDOMSource;
-  HTTP: HTTPSource;
-  state: StateSource<AppState>;
-};
-type AppSinks = {
-  DOM: Stream<VNode>;
-  state: Stream<Reducer<AppState>>;
-  HTTP: Stream<RequestInput>;
-};
+import { AppState, AppSinks, AppSources } from "./app.types";
+import useForm from "./app.useForm";
 
 function App(sources: AppSources) {
-  const formLens: Lens<AppState, FormState> = {
-    get: (state: AppState) => ({
-      fieldContent: state.ui.fieldContent,
-      submittedName: state.data.submittedName,
-    }),
-    set: (oldParentState: AppState, newChildState: FormState): AppState => ({
-      data: {
-        submittedName: newChildState.submittedName,
-        countryData: oldParentState.data.countryData,
-      },
-      ui: {
-        fieldContent: newChildState.fieldContent,
-      },
-    }),
-  };
-  const formSinks = isolate(Form, { state: formLens, "*": "form" })(
-    sources
-  ) as AppSinks;
+  const formSinks = useForm(sources);
 
   const getCountryDataLens: Lens<AppState, string> = {
     get: (state: AppState) => state.data.submittedName,

@@ -2,7 +2,7 @@ import xstream, { Stream } from "xstream";
 import {
   GetCountryDataState,
   GetCountryDataAction,
-} from "./getCountryData.types";
+} from "./getCountryData.typesInner";
 
 export function model(
   action$: Stream<GetCountryDataAction>,
