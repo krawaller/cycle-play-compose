@@ -18,7 +18,7 @@ export type AppSinks = {
 export type AppState = {
   data: {
     submittedName: string;
-    countryData: CountryDataState | null;
+    countryData: CountryDataState;
   };
   ui: {
     fieldContent: string;

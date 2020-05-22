@@ -1,10 +1,10 @@
 import { HTTPSource, RequestInput } from "@cycle/http";
 import { Stream } from "xstream";
-import { StateSource } from "@cycle/state";
+import { StateSource, Reducer } from "@cycle/state";
 
-import { GetCountryDataState } from "./getCountryData.typesInner";
+import { CountryDataState } from "../app/app.types";
 
-export type GetCountryDataInputState = string; // Stream of country names to load
+export type GetCountryDataInputState = CountryDataState;
 
 export type GetCountryDataSources = {
   HTTP: HTTPSource;
@@ -13,5 +13,5 @@ export type GetCountryDataSources = {
 
 export type GetCountryDataSinks = {
   HTTP: Stream<RequestInput>;
-  countryData: Stream<GetCountryDataState>;
+  state: Stream<Reducer<GetCountryDataInputState>>;
 };

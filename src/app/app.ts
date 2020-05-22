@@ -1,3 +1,4 @@
+import xstream from "xstream";
 import { AppState, AppSinks, AppSources } from "./app.types";
 import useForm from "./app.useForm";
 import useGetCountryData from "./app.useGetCountryData";
@@ -7,16 +8,18 @@ function App(sources: AppSources) {
   const formSinks = useForm(sources);
   const getCountryDataSinks = useGetCountryData(sources);
 
-  const vdom$ = view(sources, formSinks.DOM, getCountryDataSinks.countryData);
+  const vdom$ = view(sources, formSinks.DOM);
 
   const initialState: AppState = {
     ui: { fieldContent: "" },
-    data: { submittedName: "", countryData: null },
+    data: { submittedName: "", countryData: { state: "idle" } },
   };
 
   const sinks: AppSinks = {
     DOM: vdom$,
-    state: formSinks.state.startWith(() => initialState),
+    state: xstream
+      .merge(formSinks.state, getCountryDataSinks.state)
+      .startWith(() => initialState),
     HTTP: getCountryDataSinks.HTTP,
   };
 

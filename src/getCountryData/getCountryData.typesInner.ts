@@ -1,6 +1,4 @@
-import { CountryDataState, FetchedCountryData } from "../app/app.types";
-
-export type GetCountryDataState = CountryDataState;
+import { FetchedCountryData } from "../app/app.types";
 
 export type GetCountryDataAction =
   | { type: "setData"; data: FetchedCountryData }

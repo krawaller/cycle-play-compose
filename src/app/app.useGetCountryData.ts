@@ -1,4 +1,5 @@
-import { Lens } from "@cycle/state";
+import produce from "immer";
+import { Lens, Reducer } from "@cycle/state";
 import isolate from "@cycle/isolate";
 
 import GetCountryData, {
@@ -6,16 +7,25 @@ import GetCountryData, {
 } from "../getCountryData/getCountryData";
 
 import { AppState, AppSources } from "./app.types";
+import { Stream } from "xstream";
 
 const getCountryDataLens: Lens<AppState, GetCountryDataInputState> = {
-  get: (state: AppState) => state.data.submittedName,
-  set: (oldParentState, newChildState) => oldParentState, // not used
+  get: (state: AppState) => state.data.countryData,
+  set: (oldParentState: AppState, newChildState) =>
+    produce(oldParentState, (draft) => {
+      draft.data.countryData = newChildState!;
+    }),
 };
 
 export function useGetCountryData(sources: AppSources) {
-  return isolate(GetCountryData, {
+  const sinks = isolate(GetCountryData, {
     state: getCountryDataLens,
   })(sources);
+  return {
+    ...sinks,
+    // Types get wrangled somehow
+    state: sinks.state as Stream<Reducer<AppState>>,
+  };
 }
 
 export default useGetCountryData;

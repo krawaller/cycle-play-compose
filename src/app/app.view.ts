@@ -1,20 +1,16 @@
 import { div, h1, VNode } from "@cycle/dom";
 import xstream, { Stream } from "xstream";
 
-import { AppSources, CountryDataState } from "./app.types";
+import { AppSources } from "./app.types";
 
-export function view(
-  sources: AppSources,
-  formvdom$: Stream<VNode>,
-  countryData$: Stream<CountryDataState>
-) {
+export function view(sources: AppSources, formvdom$: Stream<VNode>) {
   return xstream
-    .combine(sources.state.stream, formvdom$, countryData$)
-    .map(([appState, nameformvdom, data]) =>
+    .combine(sources.state.stream, formvdom$)
+    .map(([appState, nameformvdom]) =>
       div([
         h1("Hello " + appState.data.submittedName),
         nameformvdom,
-        JSON.stringify(data, null, 2),
+        JSON.stringify(appState.data.countryData, null, 2),
       ])
     );
 }
