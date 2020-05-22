@@ -1,3 +1,4 @@
+import produce from "immer";
 import { Lens, Reducer } from "@cycle/state";
 import isolate from "@cycle/isolate";
 
@@ -10,15 +11,11 @@ const formLens: Lens<AppState, FormState> = {
     fieldContent: state.ui.fieldContent,
     submittedName: state.data.submittedName,
   }),
-  set: (oldParentState: AppState, newChildState: FormState): AppState => ({
-    data: {
-      submittedName: newChildState.submittedName,
-      countryData: oldParentState.data.countryData,
-    },
-    ui: {
-      fieldContent: newChildState.fieldContent,
-    },
-  }),
+  set: (oldParentState: AppState, newChildState: FormState) =>
+    produce(oldParentState, (draft) => {
+      draft.ui.fieldContent = newChildState.fieldContent;
+      draft.data.submittedName = newChildState.submittedName;
+    }),
 };
 
 export function useForm(sources: AppSources) {
