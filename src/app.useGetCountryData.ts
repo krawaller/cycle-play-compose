@@ -7,7 +7,7 @@ import { AppState, AppSources } from "./app.types";
 
 const getCountryDataLens: Lens<AppState, GetCountryDataInputState> = {
   get: (state: AppState) => state.data.submittedName,
-  set: (oldParentState) => oldParentState, // not used
+  set: (oldParentState, newChildState) => oldParentState, // not used
 };
 
 export function useGetCountryData(sources: AppSources) {

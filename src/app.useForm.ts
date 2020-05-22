@@ -1,8 +1,9 @@
-import { Lens } from "@cycle/state";
+import { Lens, Reducer } from "@cycle/state";
 import isolate from "@cycle/isolate";
 
-import { AppState, AppSinks, AppSources } from "./app.types";
+import { AppState, AppSources } from "./app.types";
 import Form, { FormState } from "./form";
+import { Stream } from "xstream";
 
 const formLens: Lens<AppState, FormState> = {
   get: (state: AppState) => ({
@@ -21,7 +22,12 @@ const formLens: Lens<AppState, FormState> = {
 };
 
 export function useForm(sources: AppSources) {
-  return isolate(Form, { state: formLens, "*": "form" })(sources) as AppSinks;
+  const formSinks = isolate(Form, { state: formLens, "*": "form" })(sources);
+  return {
+    ...formSinks,
+    // Types get mangled somehow
+    state: formSinks.state as Stream<Reducer<AppState>>,
+  };
 }
 
 export default useForm;
