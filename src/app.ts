@@ -1,38 +1,13 @@
-import { div, h1 } from "@cycle/dom";
-import { Lens } from "@cycle/state";
-import isolate from "@cycle/isolate";
-import xstream from "xstream";
-
-import GetCountryData from "./getCountryData";
-
 import { AppState, AppSinks, AppSources } from "./app.types";
 import useForm from "./app.useForm";
+import useGetCountryData from "./app.useGetCountryData";
+import view from "./app.view";
 
 function App(sources: AppSources) {
   const formSinks = useForm(sources);
+  const getCountryDataSinks = useGetCountryData(sources);
 
-  const getCountryDataLens: Lens<AppState, string> = {
-    get: (state: AppState) => state.data.submittedName,
-    set: (s) => s,
-  };
-
-  const getCountryDataSinks = isolate(GetCountryData, {
-    state: getCountryDataLens,
-  })(sources);
-
-  const vdom$ = xstream
-    .combine(
-      sources.state.stream,
-      formSinks.DOM,
-      getCountryDataSinks.countryData
-    )
-    .map(([appState, nameformvdom, out]) =>
-      div([
-        h1("Hello " + appState.data.submittedName),
-        nameformvdom,
-        JSON.stringify(out, null, 2),
-      ])
-    );
+  const vdom$ = view(sources, formSinks.DOM, getCountryDataSinks.countryData);
 
   const initialState: AppState = {
     ui: { fieldContent: "" },
