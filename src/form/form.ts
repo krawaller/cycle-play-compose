@@ -1,4 +1,4 @@
-import xstream, { Stream } from "xstream";
+import xs, { Stream } from "xstream";
 import { Reducer } from "@cycle/state";
 
 import intent from "./form.intent";
@@ -17,7 +17,7 @@ function Form(sources: FormSources): FormSinks {
 
   const vtree$ = view(assignableInputSinks.DOM, confirmButtonSinks.DOM);
 
-  const defaultReducer$: Stream<Reducer<FormState>> = xstream.of(
+  const defaultReducer$: Stream<Reducer<FormState>> = xs.of(
     (s) => s || { submittedName: "", fieldContent: "" }
   );
   const submitReducer$: Stream<Reducer<FormState>> = submittedName$.map(
@@ -29,7 +29,7 @@ function Form(sources: FormSources): FormSinks {
 
   return {
     DOM: vtree$,
-    state: xstream.merge(
+    state: xs.merge(
       defaultReducer$,
       assignableInputSinks.state,
       submitReducer$

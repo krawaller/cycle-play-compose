@@ -1,4 +1,4 @@
-import xstream, { Stream } from "xstream";
+import xs, { Stream } from "xstream";
 
 import { GetCountryDataAction } from "./getCountryData.typesInner";
 import { GetCountryDataSources } from "./getCountryData.typesOuter";
@@ -10,7 +10,7 @@ export function intent(
   return sources.HTTP.select("countryData")
     .map((response$) =>
       // catch errors and include them in the stream
-      response$.replaceError((error) => xstream.of({ error } as any))
+      response$.replaceError((error) => xs.of({ error } as any))
     )
     .flatten() // this is a stream of streams, so we flatten into a single stream
     .map(mapResponse); // convert network responses into proper actions

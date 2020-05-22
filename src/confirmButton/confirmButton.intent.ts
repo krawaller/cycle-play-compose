@@ -1,11 +1,11 @@
-import xstream, { Stream } from "xstream";
+import xs, { Stream } from "xstream";
 import {
   ConfirmButtonAction,
   ConfirmButtonSources,
 } from "./confirmButton.types";
 
 export function intent(sources: ConfirmButtonSources) {
-  return xstream.merge(
+  return xs.merge(
     sources.state.stream.map((i) => (i ? "DISABLE" : "ENABLE")),
     sources.DOM.select(".maybe").events("click").mapTo("MAYBE"),
     sources.DOM.select(".cancel").events("click").mapTo("CANCEL"),

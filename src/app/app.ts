@@ -1,4 +1,4 @@
-import xstream from "xstream";
+import xs from "xstream";
 import { AppState, AppSinks, AppSources } from "./app.types";
 import useForm from "./app.useForm";
 import useGetCountryData from "./app.useGetCountryData";
@@ -17,7 +17,7 @@ function App(sources: AppSources) {
 
   const sinks: AppSinks = {
     DOM: vdom$,
-    state: xstream
+    state: xs
       .merge(formSinks.state, getCountryDataSinks.state)
       .startWith(() => initialState),
     HTTP: getCountryDataSinks.HTTP,

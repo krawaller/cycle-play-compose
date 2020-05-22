@@ -1,10 +1,10 @@
 import { div, h1, VNode } from "@cycle/dom";
-import xstream, { Stream } from "xstream";
+import xs, { Stream } from "xstream";
 
 import { AppSources } from "./app.types";
 
 export function view(sources: AppSources, formvdom$: Stream<VNode>) {
-  return xstream
+  return xs
     .combine(sources.state.stream, formvdom$)
     .map(([appState, nameformvdom]) =>
       div([

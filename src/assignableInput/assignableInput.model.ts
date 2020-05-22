@@ -1,4 +1,4 @@
-import xstream, { Stream } from "xstream";
+import xs, { Stream } from "xstream";
 
 import {
   AssignableInputSources,
@@ -9,7 +9,7 @@ export function model(
   sources: AssignableInputSources,
   action$: Stream<AssignableInputAction>
 ) {
-  return xstream.merge(
+  return xs.merge(
     action$, // stream of stuff typed by the user
     sources.state.stream // stream of assignments from parent
   );
