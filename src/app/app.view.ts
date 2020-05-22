@@ -1,16 +1,13 @@
-import { div, h1, VNode } from "@cycle/dom";
+import { div, VNode } from "@cycle/dom";
 import xs, { Stream } from "xstream";
 
-import { AppSources } from "./app.types";
-
-export function view(sources: AppSources, formvdom$: Stream<VNode>) {
+export function view(formvdom$: Stream<VNode>, statsvdom$: Stream<VNode>) {
   return xs
-    .combine(sources.state.stream, formvdom$)
-    .map(([appState, nameformvdom]) =>
+    .combine(formvdom$, statsvdom$)
+    .map(([nameformvdom, statsvdom]) =>
       div([
-        h1("Hello " + appState.data.submittedName),
-        nameformvdom,
-        JSON.stringify(appState.data.countryData, null, 2),
+        div(".app", [nameformvdom, statsvdom]),
+        div(".credit", ["Design by Eelke B"]),
       ])
     );
 }

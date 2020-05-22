@@ -1,0 +1,68 @@
+body {
+  background-color: yellow;
+}
+
+.app {
+  margin-top: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form {
+  width: 350px;
+  margin: 0 auto;
+}
+
+button {
+  margin-left: 6px;
+}
+
+* {
+  font-size: 100%;
+  font-family: "Comic Sans MS";
+}
+
+.statsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.statistic {
+  outline: 1px solid black;
+  width: 200px;
+  height: 200px;
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  -webkit-box-shadow: 10px 9px 5px -5px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 10px 9px 5px -5px rgba(0, 0, 0, 0.2);
+  box-shadow: 10px 9px 5px -5px rgba(0, 0, 0, 0.2);
+}
+
+.statistic .number {
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.statistic .description {
+  font-size: 0.9em;
+}
+
+.title {
+  font-size: 2.5em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.credit {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+}
