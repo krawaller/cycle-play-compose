@@ -1,5 +1,5 @@
 import isolate from "@cycle/isolate";
-import ConfirmButton from "./confirmButton";
+import { ConfirmButton } from "../confirmButton/confirmButton";
 import { Lens } from "@cycle/state";
 import { FormSources, FormState } from "./form.types";
 

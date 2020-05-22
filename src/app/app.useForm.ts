@@ -2,7 +2,7 @@ import { Lens, Reducer } from "@cycle/state";
 import isolate from "@cycle/isolate";
 
 import { AppState, AppSources } from "./app.types";
-import Form, { FormState } from "./form";
+import Form, { FormState } from "../form/form";
 import { Stream } from "xstream";
 
 const formLens: Lens<AppState, FormState> = {

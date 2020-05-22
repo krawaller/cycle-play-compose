@@ -6,7 +6,9 @@ import intent from "./confirmButton.intent";
 import model from "./confirmButton.model";
 import view from "./confirmButton.view";
 
-export default (sources: ConfirmButtonSources): ConfirmButtonSinks => {
+export function ConfirmButton(
+  sources: ConfirmButtonSources
+): ConfirmButtonSinks {
   const action$ = intent(sources);
   const state$ = model(action$);
   const vtree$ = view(state$);
@@ -17,4 +19,4 @@ export default (sources: ConfirmButtonSources): ConfirmButtonSinks => {
     DOM: vtree$,
     submit$,
   };
-};
+}

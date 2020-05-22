@@ -3,7 +3,7 @@ import { Reducer, Lens } from "@cycle/state";
 import { Stream } from "xstream";
 
 import { FormSources, FormState } from "./form.types";
-import AssignableInput, { AssignableInputState } from "./assignableInput";
+import { AssignableInput, AssignableInputState } from "../assignableInput";
 
 const assignableInputLens: Lens<FormState, AssignableInputState> = {
   get: (s: FormState) => s.fieldContent,

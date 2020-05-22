@@ -1,7 +1,9 @@
 import { Lens } from "@cycle/state";
 import isolate from "@cycle/isolate";
 
-import GetCountryData, { GetCountryDataInputState } from "./getCountryData";
+import GetCountryData, {
+  GetCountryDataInputState,
+} from "../getCountryData/getCountryData";
 
 import { AppState, AppSources } from "./app.types";
 

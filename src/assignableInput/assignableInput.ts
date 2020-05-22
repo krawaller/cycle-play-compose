@@ -11,7 +11,7 @@ import model from "./assignableInput.model";
 import { Stream } from "xstream";
 import { Reducer } from "@cycle/state";
 
-export default function AssignableInput(
+export function AssignableInput(
   sources: AssignableInputSources
 ): AssignableInputSinks {
   const action$ = intent(sources);
@@ -27,3 +27,5 @@ export default function AssignableInput(
     state: reducer$,
   };
 }
+
+export default AssignableInput;
