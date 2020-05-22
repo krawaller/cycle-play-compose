@@ -6,20 +6,9 @@ import isolate from "@cycle/isolate";
 import xstream, { Stream } from "xstream";
 
 import Form, { FormState } from "./form";
-import CountryData, {
-  CountryDataSources,
-  CountryDataState,
-} from "./countryData";
+import CountryData from "./countryData";
 
-type AppState = {
-  data: {
-    submittedName: string;
-    countryData: CountryDataState | null;
-  };
-  ui: {
-    fieldContent: string;
-  };
-};
+import { AppState } from "./types";
 
 type AppSources = {
   DOM: MainDOMSource;

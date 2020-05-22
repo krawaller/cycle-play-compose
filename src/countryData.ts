@@ -1,20 +1,7 @@
 import { HTTPSource, RequestInput, Response } from "@cycle/http";
 import xstream, { Stream } from "xstream";
 import { StateSource } from "@cycle/state";
-
-type FetchedCountryData = {
-  Confirmed: number;
-  Deaths: number;
-  Recovered: number;
-  Active: number;
-  Date: string;
-};
-
-export type CountryDataState =
-  | { state: "idle" }
-  | { state: "loading"; country: string }
-  | { state: "error"; error: string }
-  | { state: "data"; data: FetchedCountryData };
+import { CountryDataState, FetchedCountryData } from "./types";
 
 const response2state = (res: Response | Error): CountryDataState => {
   if (res instanceof Error) return { state: "error", error: res.message };
