@@ -15,7 +15,7 @@ export function Form(sources: FormSources): FormSinks {
 
   const action$ = intent(sources, confirmButtonSinks.submit$);
   const vtree$ = view(assignableInputSinks.DOM, confirmButtonSinks.DOM);
-  const model$ = model(action$);
+  const model$ = model(sources, action$);
 
   const defaultReducer$: Stream<Reducer<FormState>> = xs.of(
     (s) => s || { submittedName: "", fieldContent: "" }

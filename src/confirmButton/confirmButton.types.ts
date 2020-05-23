@@ -19,7 +19,7 @@ export type ConfirmButtonAction =
   | "CANCEL"
   | "CONFIRM";
 
-export type ConfirmButtonState =
+export type ConfirmButtonMode =
   | "areyousure" // Confirming mode, show confirm and cancel buttons
   | "waiting" // Idle mode, show submit button
   | "disabled"; // Idle but disabled

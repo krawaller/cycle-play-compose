@@ -1,9 +1,9 @@
 import { Stream } from "xstream";
-import { ConfirmButtonAction, ConfirmButtonState } from "./confirmButton.types";
+import { ConfirmButtonAction, ConfirmButtonMode } from "./confirmButton.types";
 
 export function model(
   action$: Stream<ConfirmButtonAction>
-): Stream<ConfirmButtonState> {
+): Stream<ConfirmButtonMode> {
   return action$.map((v) => {
     switch (v) {
       case "DISABLE":
