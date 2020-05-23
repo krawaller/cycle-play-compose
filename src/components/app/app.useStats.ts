@@ -1,9 +1,10 @@
 import produce from "immer";
-import { Lens } from "@cycle/state";
+import { Lens, Reducer } from "@cycle/state";
 import isolate from "@cycle/isolate";
 
 import { AppState, AppSources } from "./app.types";
 import { Stats, StatsState } from "../stats";
+import { Stream } from "xstream";
 
 const statsLens: Lens<AppState, StatsState> = {
   get: (state: AppState) => state.data.countryData,
@@ -14,7 +15,12 @@ const statsLens: Lens<AppState, StatsState> = {
 };
 
 export function useStats(sources: AppSources) {
-  return isolate(Stats, { state: statsLens })(sources);
+  const sinks = isolate(Stats, { state: statsLens })(sources);
+  return {
+    ...sinks,
+    // Types get wrangled somehow
+    state: sinks.state as Stream<Reducer<AppState>>,
+  };
 }
 
 export default useStats;

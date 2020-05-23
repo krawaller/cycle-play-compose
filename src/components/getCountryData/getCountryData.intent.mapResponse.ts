@@ -13,7 +13,10 @@ export const mapResponse = (res: Response | Error): GetCountryDataAction => {
     if (!Array.isArray(data)) throw new Error();
     if (!data.length)
       return setError({ error: "The API had no data for this country" });
-    return setData({ data: data[data.length - 1] }); // latest entry is the newest
+    return setData({
+      data: data[data.length - 1],
+      country: res.request.url.match(/[^\/]*$/)![0],
+    }); // latest entry is the newest
   } catch (e) {
     return setError({ error: "Failed to parse response from server" });
   }

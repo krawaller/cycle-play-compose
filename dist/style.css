@@ -70,3 +70,13 @@ button {
 .ago {
   text-align: center;
 }
+
+.clearBtnContainer {
+  text-align: center;
+}
+
+.clearBtnContainer > span {
+  font-size: 4.5em;
+  cursor: pointer;
+  margin: 6px;
+}

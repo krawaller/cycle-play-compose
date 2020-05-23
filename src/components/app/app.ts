@@ -20,7 +20,7 @@ export function App(sources: AppSources) {
   const sinks: AppSinks = {
     DOM: vdom$,
     state: xs
-      .merge(formSinks.state, getCountryDataSinks.state)
+      .merge(formSinks.state, getCountryDataSinks.state, statsSinks.state)
       .startWith(() => initialState),
     HTTP: getCountryDataSinks.HTTP,
   };

@@ -9,9 +9,14 @@ export type FetchedCountryData = {
 
 export type CountryDataErrorState = { state: "error"; error: string };
 export type CountryDataIdleState = { state: "idle" };
-export type CountryDataLoadingState = { state: "loading"; country: string };
+export type CountryDataLoadingState = {
+  state: "loading";
+  country: string;
+  force?: boolean;
+};
 export type CountryDataContentState = {
   state: "data";
+  country: string;
   data: FetchedCountryData;
 };
 

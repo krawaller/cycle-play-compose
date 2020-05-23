@@ -11,7 +11,11 @@ export function model(
   return action$.map(
     (action): GetCountryDataInputState =>
       isSetDataAction(action)
-        ? { state: "data", data: action.payload.data }
+        ? {
+            state: "data",
+            data: action.payload.data,
+            country: action.payload.country,
+          }
         : { state: "error", error: action.payload.error }
   );
 }
