@@ -1,14 +1,10 @@
 import { Stream } from "xstream";
 import { StateSource } from "@cycle/state";
-
-import { FetchedCountryData } from "../app/app.types";
 import { VNode } from "@cycle/dom";
 
-export type StatsState = {
-  country: string;
-  data?: FetchedCountryData | null;
-  error?: string;
-};
+import { CountryDataState } from "../../common";
+
+export type StatsState = CountryDataState;
 
 export type StatsSources = {
   state: StateSource<StatsState>;

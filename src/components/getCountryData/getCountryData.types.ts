@@ -2,7 +2,7 @@ import { HTTPSource, RequestInput } from "@cycle/http";
 import { Stream } from "xstream";
 import { StateSource, Reducer } from "@cycle/state";
 
-import { CountryDataState } from "../app/app.types";
+import { CountryDataState } from "../../common";
 
 export type GetCountryDataInputState = CountryDataState;
 
