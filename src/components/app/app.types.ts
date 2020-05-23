@@ -3,6 +3,8 @@ import { StateSource, Reducer } from "@cycle/state";
 import { HTTPSource, RequestInput } from "@cycle/http";
 import { Stream } from "xstream";
 
+import { FetchedCountryData } from "../../common/types";
+
 export type AppSources = {
   DOM: MainDOMSource;
   HTTP: HTTPSource;
@@ -30,11 +32,3 @@ export type CountryDataState =
   | { state: "loading"; country: string }
   | { state: "error"; error: string }
   | { state: "data"; data: FetchedCountryData };
-
-export type FetchedCountryData = {
-  Confirmed: number;
-  Deaths: number;
-  Recovered: number;
-  Active: number;
-  Date: string;
-};

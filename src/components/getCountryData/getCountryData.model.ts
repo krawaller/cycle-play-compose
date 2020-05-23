@@ -1,17 +1,18 @@
 import { Stream } from "xstream";
+import { GetCountryDataInputState } from "./getCountryData.types";
 import {
-  GetCountryDataInputState,
   GetCountryDataAction,
-} from "./getCountryData.types";
+  isSetDataAction,
+} from "./getCountryData.actions";
 
 export function model(
   action$: Stream<GetCountryDataAction>
 ): Stream<GetCountryDataInputState> {
   return action$.map(
     (action): GetCountryDataInputState =>
-      action.type === "setError"
-        ? { state: "error", error: action.error }
-        : { state: "data", data: action.data }
+      isSetDataAction(action)
+        ? { state: "data", data: action.payload.data }
+        : { state: "error", error: action.payload.error }
   );
 }
 
