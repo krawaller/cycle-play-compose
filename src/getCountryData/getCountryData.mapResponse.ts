@@ -1,5 +1,5 @@
 import { Response } from "@cycle/http";
-import { GetCountryDataAction } from "./getCountryData.typesInner";
+import { GetCountryDataAction } from "./getCountryData.types";
 
 export const mapResponse = (res: Response | Error): GetCountryDataAction => {
   if (res instanceof Error) return { type: "setError", error: res.message };

@@ -1,27 +1,18 @@
-import dropRepeats from "xstream/extra/dropRepeats";
 import {
   GetCountryDataSinks,
   GetCountryDataSources,
-} from "./getCountryData.typesOuter";
-export * from "./getCountryData.typesOuter";
+} from "./getCountryData.types";
+export * from "./getCountryData.types";
 import intent from "./getCountryData.intent";
 import model from "./getCountryData.model";
+import request from "./getCountryData.request";
 
 export function GetCountryData(
   sources: GetCountryDataSources
 ): GetCountryDataSinks {
-  const country$ = sources.state.stream
-    .filter((s) => s.state === "loading")
-    .map((s) => (s as { country: string }).country)
-    .compose(dropRepeats());
-
-  const request$ = country$.map((country) => ({
-    url: `https://api.covid19api.com/total/country/${country}`,
-    category: "countryData",
-  }));
-
   const action$ = intent(sources);
   const state$ = model(action$);
+  const request$ = request(sources);
 
   return {
     HTTP: request$,

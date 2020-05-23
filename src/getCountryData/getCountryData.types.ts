@@ -6,6 +6,12 @@ import { CountryDataState } from "../app/app.types";
 
 export type GetCountryDataInputState = CountryDataState;
 
+import { FetchedCountryData } from "../app/app.types";
+
+export type GetCountryDataAction =
+  | { type: "setData"; data: FetchedCountryData }
+  | { type: "setError"; error: string };
+
 export type GetCountryDataSources = {
   HTTP: HTTPSource;
   state: StateSource<GetCountryDataInputState>;

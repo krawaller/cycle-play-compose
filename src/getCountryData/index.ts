@@ -1,2 +1,2 @@
 export * from "./getCountryData";
-export * from "./getCountryData.typesOuter";
+export * from "./getCountryData.types";

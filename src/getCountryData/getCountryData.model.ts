@@ -1,6 +1,8 @@
 import { Stream } from "xstream";
-import { GetCountryDataAction } from "./getCountryData.typesInner";
-import { GetCountryDataInputState } from "./getCountryData.typesOuter";
+import {
+  GetCountryDataInputState,
+  GetCountryDataAction,
+} from "./getCountryData.types";
 
 export function model(
   action$: Stream<GetCountryDataAction>

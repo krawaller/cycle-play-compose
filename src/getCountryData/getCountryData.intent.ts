@@ -1,7 +1,9 @@
 import xs, { Stream } from "xstream";
 
-import { GetCountryDataAction } from "./getCountryData.typesInner";
-import { GetCountryDataSources } from "./getCountryData.typesOuter";
+import {
+  GetCountryDataSources,
+  GetCountryDataAction,
+} from "./getCountryData.types";
 import mapResponse from "./getCountryData.mapResponse";
 
 export function intent(

@@ -14,8 +14,8 @@ import { Reducer } from "@cycle/state";
 export function AssignableInput(
   sources: AssignableInputSources
 ): AssignableInputSinks {
-  const action$ = intent(sources);
-  const state$ = model(sources, action$);
+  const action$ = intent(sources); // stream of text typed by the user
+  const state$ = model(sources, action$); // user typings AND outside assignment
   const vtree$ = view(state$);
 
   const reducer$: Stream<Reducer<
