@@ -1,10 +1,10 @@
 import isolate from "@cycle/isolate";
-import { ConfirmButton } from "../confirmButton/confirmButton";
+import { ConfirmButton, ConfirmButtonState } from "../confirmButton";
 import { Lens } from "@cycle/state";
 import { FormSources, FormState } from "./form.types";
 
-const confirmButtonLens: Lens<FormState, boolean> = {
-  get: (s: FormState) => !s.fieldContent,
+const confirmButtonLens: Lens<FormState, ConfirmButtonState> = {
+  get: (s: FormState) => ({ disabled: !s.fieldContent }),
   set: (oldFormState) => oldFormState, // this isn't used
 };
 

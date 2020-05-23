@@ -3,7 +3,7 @@ import { makeDOMDriver } from "@cycle/dom";
 import { withState } from "@cycle/state";
 import { makeHTTPDriver } from "@cycle/http";
 
-import App from "./app/app";
+import { App } from "./components/app";
 
 const DOM = makeDOMDriver("#app-container");
 const HTTP = makeHTTPDriver();

@@ -2,9 +2,13 @@ import { MainDOMSource, VNode } from "@cycle/dom";
 import { StateSource } from "@cycle/state";
 import { Stream } from "xstream";
 
+export type ConfirmButtonState = {
+  disabled: boolean;
+};
+
 export type ConfirmButtonSources = {
   DOM: MainDOMSource;
-  state: StateSource<boolean>; // whether or not we are disabled
+  state: StateSource<ConfirmButtonState>;
 };
 
 export type ConfirmButtonSinks = {

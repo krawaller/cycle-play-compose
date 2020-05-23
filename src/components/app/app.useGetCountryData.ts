@@ -2,9 +2,7 @@ import produce from "immer";
 import { Lens, Reducer } from "@cycle/state";
 import isolate from "@cycle/isolate";
 
-import GetCountryData, {
-  GetCountryDataInputState,
-} from "../getCountryData/getCountryData";
+import { GetCountryData, GetCountryDataInputState } from "../getCountryData";
 
 import { AppState, AppSources } from "./app.types";
 import { Stream } from "xstream";

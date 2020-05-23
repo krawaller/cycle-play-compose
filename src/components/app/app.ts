@@ -5,7 +5,7 @@ import useGetCountryData from "./app.useGetCountryData";
 import useStats from "./app.useStats";
 import view from "./app.view";
 
-function App(sources: AppSources) {
+export function App(sources: AppSources) {
   const formSinks = useForm(sources);
   const statsSinks = useStats(sources);
   const getCountryDataSinks = useGetCountryData(sources);
