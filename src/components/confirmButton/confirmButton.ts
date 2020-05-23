@@ -5,6 +5,7 @@ import {
 import intent from "./confirmButton.intent";
 import model from "./confirmButton.model";
 import view from "./confirmButton.view";
+import { isConfirmAction } from "./confirmButton.actions";
 
 export function ConfirmButton(
   sources: ConfirmButtonSources
@@ -13,7 +14,7 @@ export function ConfirmButton(
   const state$ = model(action$);
   const vtree$ = view(state$);
 
-  const submit$ = action$.filter((i) => i === "CONFIRM").mapTo(undefined);
+  const submit$ = action$.filter(isConfirmAction).mapTo(undefined);
 
   return {
     DOM: vtree$,
