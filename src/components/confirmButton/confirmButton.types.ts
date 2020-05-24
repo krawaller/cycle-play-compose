@@ -21,6 +21,8 @@ export type ConfirmButtonSinks = {
   submit$: Stream<undefined>; // clicks on the final confirm button
 };
 
+// This is an internal state, tracking what mode the button
+// is currently in
 export type ConfirmButtonMode =
   | "areyousure" // Confirming mode, show confirm and cancel buttons
   | "waiting" // Idle mode, show submit button

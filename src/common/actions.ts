@@ -1,3 +1,10 @@
+/*
+Util types and methods to employ a Redux-like action setup. In fact, this code
+is stolen straight out of a Redux project. You don't need to use the action
+abstraction in CycleJS components, but it is already familiar, it can provide
+some extra clarity as to what is going on.
+*/
+
 export type Action<T = string, P = any> = {
   type: T;
   payload: P;
