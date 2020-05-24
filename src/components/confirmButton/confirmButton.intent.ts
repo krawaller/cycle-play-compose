@@ -15,8 +15,9 @@ export function intent(
 ): Stream<ConfirmButtonAction> {
   return xs.merge(
     sources.state.stream
-      .map((i) => (i.disabled ? disable() : enable()))
-      .compose(dropRepeats()),
+      .map((s) => s.disabled)
+      .compose(dropRepeats())
+      .map((disabledBool) => (disabledBool ? disable() : enable())),
     sources.DOM.select(".maybe").events("click").mapTo(maybe()),
     sources.DOM.select(".cancel").events("click").mapTo(cancel()),
     sources.DOM.select(".confirm").events("click").mapTo(confirm())
